@@ -13,37 +13,64 @@ const operate = function(operandA, operandB, operator) {
     if (operator === '/') return divide(operandA, operandB);
 }
 
-
-//make the display show numbers clicked
 const displayNums = function(digit) {
+    //if before is operator clear the display
+    //add new digit to display
+    //add new display to nextNum
+    //
+    if(isOp) {
+        display.textContent = "";
+        isOp = false;
+    }
     display.textContent += digit;
-    currentNum = +display.textContent;
+    if (count > 0)
+    {
+        nextNum = +display.textContent;
+    }
+        
+    else 
+        currentNum = +display.textContent;
+    
 }
 
-
-//when an operator is clicked save the operator and operand and clear the display
 const operatorClick = function(operator) {
-    nextNum = currentNum;
+    
+    if (count > 0)
+    {
+        display.textContent = operate(currentNum, nextNum, oprtr).toFixed(2);
+        currentNum = +display.textContent;
+    }
+        
     oprtr = operator;
-    display.textContent = "";
+    isOp = true;
+    count++;
+    //display.textContent = "";
+
+    
 }
-//when equal sign is clicked, make the operations using operands and the operator.
-const equalClick = function(operandA, ) {
-    display.textContent = operate(currentNum, nextNum, oprtr);
+
+const equalClick = function() {
+    if(count>0) {
+    count = 0;
+    display.textContent = operate(currentNum, nextNum, oprtr).toFixed(2);
     currentNum = +display.textContent;
+    isOp = false;
+    }
 }
 
 const display = document.querySelector('div');
 const numbers = document.querySelectorAll('.number');
 const operators = document.querySelectorAll('.operator');
 
-var currentNum = 0;
-var nextNum = 0;
+let count = 0;
+let isOp = false;
+let currentNum;
+let nextNum;
 numbers.forEach(number => number.addEventListener(
     'click', () => displayNums(number.textContent)
     ));
 
-var oprtr = '';
+let oprtr = '';
 operators.forEach(operator => operator.addEventListener(
     'click', () => operatorClick(operator.textContent))
     );
