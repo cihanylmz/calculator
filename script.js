@@ -14,58 +14,81 @@ const operate = function(operandA, operandB, operator) {
 }
 
 const displayNums = function(digit) {
-    //if before is operator clear the display
-    //add new digit to display
-    //add new display to nextNum
-    //
     if(isOp) {
         display.textContent = "";
         isOp = false;
+        isCalculating = true;
     }
     display.textContent += digit;
-    if (count > 0)
+    if (isCalculating)
     {
         nextNum = +display.textContent;
     }
         
     else 
         currentNum = +display.textContent;
-    
 }
 
 const operatorClick = function(operator) {
-    
-    if (count > 0)
+    if (isCalculating)
     {
-        display.textContent = operate(currentNum, nextNum, oprtr).toFixed(2);
-        currentNum = +display.textContent;
+        if (nextNum === 0 && oprtr === '/') {
+            clearClick();
+            alert("You can't divide by zero!")
+        }
+
+        else {
+            display.textContent = Math.round(operate(currentNum, nextNum, oprtr) * 100) / 100;
+            currentNum = +display.textContent;
+        }
     }
         
     oprtr = operator;
     isOp = true;
-    count++;
-    //display.textContent = "";
-
-    
 }
 
 const equalClick = function() {
-    if(count>0) {
-    count = 0;
-    display.textContent = operate(currentNum, nextNum, oprtr).toFixed(2);
-    currentNum = +display.textContent;
-    isOp = false;
+    //TODO: fix bug when after entering a number and an operator and pressing equal sign, crash!
+    if(isCalculating) {
+        isCalculating = false;
+    if (nextNum === 0 && oprtr === '/') {
+        clearClick();
+        alert("You can't divide by zero!")
+    }   
+    else {
+        display.textContent = Math.round(operate(currentNum, nextNum, oprtr) * 100) / 100;
+        currentNum = +display.textContent;
+        isOp = false;
+    }
     }
 }
 
-const display = document.querySelector('div');
+const clearClick = function() {
+    display.textContent = '';
+    count = 0;
+    isOp = false;
+    isCalculating = false;
+    // currentNum = undefined;
+    // nextNum = undefined;
+    // oprtr = '';
+}
+
+const decimalClick = function () {
+    if (display.textContent.includes('.')) return;
+    display.textContent += '.';
+
+}
+
+const display = document.querySelector('#display');
 const numbers = document.querySelectorAll('.number');
 const operators = document.querySelectorAll('.operator');
 
 let count = 0;
 let isOp = false;
+let isCalculating = false;
 let currentNum;
 let nextNum;
+
 numbers.forEach(number => number.addEventListener(
     'click', () => displayNums(number.textContent)
     ));
@@ -80,7 +103,10 @@ equalBtn.addEventListener('click', () => {
     equalClick();
 });
 
+const decimalBtn = document.querySelector('#decimal');
+decimalBtn.addEventListener('click', () => decimalClick())
+
+const clearBtn = document.querySelector('#clear');
+clearBtn.addEventListener('click', () => clearClick());
 
 
-//const clearBtn = document.querySelector('#clear');
-//clearBtn.addEventListener('click', () => display.textContent = "");
