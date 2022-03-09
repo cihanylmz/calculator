@@ -102,7 +102,7 @@ const pressKey = function (key) {
         
     if (isOperator(key)) {
         operatorClick(key);
-        return
+        return;
     }
         
     if (key === 'Backspace') {
@@ -111,7 +111,7 @@ const pressKey = function (key) {
     }
     if (key === ',' || key === '.') {
         decimalClick();
-        return
+        return;
     }
     if (key === 'Escape') {
         clearClick();
@@ -121,7 +121,6 @@ const pressKey = function (key) {
         equalClick();
         return;
     }
-
 }
 
 const display = document.querySelector('#display');
