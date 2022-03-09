@@ -50,7 +50,6 @@ const operatorClick = function(operator) {
 }
 
 const equalClick = function() {
-    //TODO: fix bug when after entering a number and an operator and pressing equal sign, crash!
     if(isCalculating) {
         isCalculating = false;
     if (nextNum === 0 && oprtr === '/') {
@@ -70,14 +69,58 @@ const clearClick = function() {
     count = 0;
     isOp = false;
     isCalculating = false;
-    // currentNum = undefined;
-    // nextNum = undefined;
-    // oprtr = '';
 }
 
 const decimalClick = function () {
     if (display.textContent.includes('.')) return;
     display.textContent += '.';
+
+}
+
+const deleteDigit = function () {
+    display.textContent = display.textContent.slice(0,
+        display.textContent.length - 1);
+    if (isCalculating)
+    {
+        nextNum = +display.textContent;
+    }
+        
+    else 
+        currentNum = +display.textContent;
+}
+
+function isOperator(str){
+    return /^[-+/*]/.test(str);
+}
+
+const pressKey = function (key) {
+    if(!isNaN(+key))
+    {
+        displayNums(key);
+        return;
+    }
+        
+    if (isOperator(key)) {
+        operatorClick(key);
+        return
+    }
+        
+    if (key === 'Backspace') {
+        deleteDigit();
+        return;
+    }
+    if (key === ',' || key === '.') {
+        decimalClick();
+        return
+    }
+    if (key === 'Escape') {
+        clearClick();
+        return;
+    }
+    if (key === 'Enter') {
+        equalClick();
+        return;
+    }
 
 }
 
@@ -90,6 +133,9 @@ let isOp = false;
 let isCalculating = false;
 let currentNum;
 let nextNum;
+
+
+document.addEventListener('keydown', (e) => pressKey(e.key))
 
 numbers.forEach(number => number.addEventListener(
     'click', () => displayNums(number.textContent)
@@ -112,16 +158,6 @@ const clearBtn = document.querySelector('#clear');
 clearBtn.addEventListener('click', () => clearClick());
 
 const dltBtn = document.querySelector('#backspace');
-dltBtn.addEventListener('click', function() {
-    display.textContent = display.textContent.slice(0,
-        display.textContent.length - 1);
-    if (isCalculating)
-    {
-        nextNum = +display.textContent;
-    }
-        
-    else 
-        currentNum = +display.textContent;
-})
+dltBtn.addEventListener('click', () => deleteDigit());
 
 
