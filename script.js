@@ -111,4 +111,17 @@ decimalBtn.addEventListener('click', () => decimalClick())
 const clearBtn = document.querySelector('#clear');
 clearBtn.addEventListener('click', () => clearClick());
 
+const dltBtn = document.querySelector('#backspace');
+dltBtn.addEventListener('click', function() {
+    display.textContent = display.textContent.slice(0,
+        display.textContent.length - 1);
+    if (isCalculating)
+    {
+        nextNum = +display.textContent;
+    }
+        
+    else 
+        currentNum = +display.textContent;
+})
+
 
