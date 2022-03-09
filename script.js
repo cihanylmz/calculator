@@ -30,6 +30,8 @@ const displayNums = function(digit) {
 }
 
 const operatorClick = function(operator) {
+    if(display.textContent === "")
+        return;
     if (isCalculating)
     {
         if (nextNum === 0 && oprtr === '/') {
